@@ -1,3 +1,5 @@
+import { ICredentialsDto } from "../dto/CredentialDto";
+
 export interface IUser {
     id: number,
     name: string,
