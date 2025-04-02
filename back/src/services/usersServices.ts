@@ -7,15 +7,18 @@ export const credentialsUsers: ICredentialsDto[]= [];
 
 let id: number = 1;
 
-export const getUserServices = async (): Promise<string> =>{
-     return "NIY: traigo los usuarios";
+// Traer todos los usuarios
+export const getUserServices = async (): Promise<IUser[]> =>{
+     return users;
 };
 
-
-export const getUserByIdService = async (id: number): Promise<string>=>{
-    return "NIY: traigo el usuario por ID";
+// Trae un usuario en base a su Id
+export const getUserByIdService = async (id: number): Promise<IUser[]>=>{
+  const userFind = users.filter((user) => user.id == id);
+  return userFind;
 }
 
+// Registra un usuario
 export const registerService = async (userName:string, password:string, userData: IUser): Promise<IUser | string>=>{
     console.log(userName, password, userData);
      
@@ -39,9 +42,7 @@ export const registerService = async (userName:string, password:string, userData
 
 }
 
-  
-
-
+// Loguea al usuario
 export const loginUserService = async (login: string): Promise<string> => {
     return "NIY: logueo usuarios";
 }

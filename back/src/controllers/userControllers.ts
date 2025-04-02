@@ -4,19 +4,34 @@ import { getUserByIdService, getUserServices, loginUserService, registerService 
 
 import { Request, Response} from "express";
 
+// Controlador de traer a los usuarios
 export const getUser = async (req:Request, res: Response) =>{
-    const users : string = await getUserServices();
-    res.status(200).json(users);
+    try {
+        const users : IUser[] = await getUserServices();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error en servidor: ", error);
+        res.status(500).json({error: "Error al recuperar los usuarios"});
+    }
 };
 
+// controlador que trar al usuario por ID
 export const getUserById = async (req:Request, res: Response) =>{
-    const {id} = req.body;
-    const user : string = await getUserByIdService(id);
+    const { id } = req.params;
+    console.log(typeof(id));
+    
+    const idChange: number = Number(id);
+ try {
+    const user : IUser[] = await getUserByIdService(idChange);
     res.status(200).json(user)
+ } catch (error) {
+    console.error("Error en el servidor", error);
+    res.status(500).json({error: "Error al recuperar al usuario"});
+ }
 };
 
+// controlador del registro
 export const registerConstroller = async (req:Request, res:Response) =>{
-    // console.log(req.body.userData);
     
    const {userName, password, userData} = req.body;
    try {
@@ -29,10 +44,7 @@ export const registerConstroller = async (req:Request, res:Response) =>{
    }
 };
 
-
-
-
-
+// controlador de logueo
 export const loginUserController = async (req:Request, res:Response) =>{
     const {login} = req.body;
     const user :string = await loginUserService(login);
