@@ -43,6 +43,13 @@ export const registerService = async (userName:string, password:string, userData
 }
 
 // Loguea al usuario
-export const loginUserService = async (login: string): Promise<string> => {
-    return "NIY: logueo usuarios";
-}
+export const loginUserService = async (userName: string, password: string): Promise<string | {token: string}>=>{
+    const logUser = credentialsUsers.find((user)=> user.password === password && user.userName === userName);
+    if(!logUser){
+     return "Usuario no registrado";
+    } else{
+     const token = "Autenticado";
+ 
+     return {token};
+    }
+    }

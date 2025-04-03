@@ -46,8 +46,19 @@ export const registerConstroller = async (req:Request, res:Response) =>{
 
 // controlador de logueo
 export const loginUserController = async (req:Request, res:Response) =>{
-    const {login} = req.body;
-    const user :string = await loginUserService(login);
-    res.status(200).json(user);
+    const {userName, password} = req.body;
+    try {
+        const result = await loginUserService(userName, password);
+        if(typeof(result) === "string"){
+            return  res.status(401).json({message: result});
+        }else{
+            res.setHeader("Authorization", `Bearer ${result.token}`);
+            return res.status(200).json({message: "Login Exitoso", token: result.token})
+        }
+    } catch (error) {
+        console.error("Error en login Controller", error);
+        return res.status(500).json({error: "Error en login"})
+    }
 }
+
 
