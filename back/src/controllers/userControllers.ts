@@ -17,9 +17,7 @@ export const getUser = async (req:Request, res: Response) =>{
 
 // controlador que trar al usuario por ID
 export const getUserById = async (req:Request, res: Response) =>{
-    const { id } = req.params;
-    console.log(typeof(id));
-    
+    const { id } = req.params;    
     const idChange: number = Number(id);
  try {
     const user : IUser[] = await getUserByIdService(idChange);
@@ -52,7 +50,6 @@ export const loginUserController = async (req:Request, res:Response) =>{
         if(typeof(result) === "string"){
         res.status(401).json({message: result});
         }else{
-            res.setHeader("Authorization", `Bearer ${result.token}`);
             res.status(200).json({message: "Login Exitoso", token: result.token})
         }
     } catch (error) {

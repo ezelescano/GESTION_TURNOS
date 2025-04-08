@@ -20,7 +20,6 @@ export const getUserByIdService = async (id: number): Promise<IUser[]>=>{
 
 // Registra un usuario
 export const registerService = async (userName:string, password:string, userData: IUser): Promise<IUser | string>=>{
-    console.log(userName, password, userData);
      
     const verifyCred: boolean = await verifyCredentialService(userName, password);
      if(verifyCred == true) {
