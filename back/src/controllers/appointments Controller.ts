@@ -3,7 +3,7 @@ import {
   cancelAppointmentsService,
   getAppointmentsByIdService,
   getAppointmentsService,
-  // scheduleAppointmentsService,
+  scheduleAppointmentsService,
 } from "../services/appointmentsServices";
 
 // controlador de turnos
@@ -29,10 +29,19 @@ export const getAppointmentsById = async (req: Request, res: Response) => {
   }
 };
 
-// export const scheduleAppointments = async (req: Request, res: Response) => {
-//   const appointments: string = await scheduleAppointmentsService();
-//   res.status(200).json(appointments);
-// };
+export const scheduleAppointments = async (req: Request, res: Response) => {
+  const appdata = req.body;
+  console.log("appData ", appdata);
+  
+  try {
+    const appointments = await scheduleAppointmentsService(appdata);
+    res.status(201).json(appointments);    
+  } catch (error) {
+    console.error("Error al crear el turno", error);
+    res.status(500).json({message:"Error al registrar el turno"})
+  }
+
+};
 
 export const cancelAppointments = async (req: Request, res: Response) => {
   const id: number = req.body;

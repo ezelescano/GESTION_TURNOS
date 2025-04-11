@@ -1,11 +1,11 @@
 import { ICredentialsDto } from "../dto/CredentialDto";
 import {IAppoiments} from "../interfaces/IAppointments";
-import { IUser } from "../interfaces/IUser";
-import { verifyCredentialService } from "./credentialsService";
+// import { IUser } from "../interfaces/IUser";
+// import { verifyCredentialService } from "./credentialsService";
 
 
 const appointments: IAppoiments[] = [];
-
+let id: number = 1;
 // trae todos los turnos
 export const getAppointmentsService = async (): Promise<IAppoiments[]> =>{
     return appointments;
@@ -18,9 +18,21 @@ export const getAppointmentsByIdService = async (id:number): Promise<IAppoiments
 };
 
 // agenda un turno
-// export const scheduleAppointmentsService = async (appdata: IAppoiments, userData:ICredentialsDto ): Promise<IAppoiments> =>{
-// //   const verifuCred: boolean = await verifyCredentialService()
-// };
+export const scheduleAppointmentsService = async (appdata: IAppoiments ): Promise<IAppoiments> =>{
+    console.log(appdata);
+    
+    const newAppo: IAppoiments = {
+       id,
+       date: new Date(appdata.date ),
+       time: appdata.time,
+       userId: appdata.id,
+       status: appdata.status
+    };
+
+    appointments.push(newAppo);
+    id++;
+    return newAppo;
+};
 
 // cancela un turno
 export const cancelAppointmentsService  = async (id: number): Promise<string> =>{
