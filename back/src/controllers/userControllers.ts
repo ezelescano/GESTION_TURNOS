@@ -3,11 +3,12 @@ import { IUser } from "../interfaces/IUser";
 import { getUserByIdService, getUserServices, loginUserService, registerService } from "../services/usersServices";
 
 import { Request, Response} from "express";
+import { User } from "../entities/User";
 
 // Controlador de traer a los usuarios
 export const getUser = async (req:Request, res: Response) =>{
     try {
-        const users : IUser[] = await getUserServices();
+        const users = await getUserServices();
         res.status(200).json(users);
     } catch (error) {
         console.error("Error en servidor: ", error);
@@ -32,8 +33,11 @@ export const getUserById = async (req:Request, res: Response) =>{
 export const registerConstroller = async (req:Request, res:Response) =>{
     
    const {userName, password, userData} = req.body;
+
+   console.log("userData", userData );
+   
    try {
-    const newUser: IUser | string = await registerService(userName, password, userData);
+    const newUser: User | string = await registerService(userName, password, userData);
     res.status(200).json(newUser);
    } catch (error) {
     console.error("Error en registerController:", error);

@@ -1,4 +1,7 @@
-import {Column, Entity,  PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity,  JoinColumn,  OneToMany,  OneToOne,  PrimaryGeneratedColumn} from "typeorm";
+import { Appointment } from "./Appointment";
+import { Credential } from "./Credential";
+import { join } from "path";
 
 @Entity({name: "users"})
 export class User{
@@ -12,10 +15,16 @@ export class User{
     email:string
 
     @Column()
-    birthday: string
+    birthday: Date
     
     @Column()
     nDni: number
 
+    @OneToMany(()=>Appointment , (appoiment => appoiment.user))
+    appoinment: Appointment[]
+
+    @OneToOne(()=> Credential, (credential) => credential.user)
+    @JoinColumn()
+    credential: Credential
 }
 
