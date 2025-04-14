@@ -18,6 +18,7 @@ export const getAppointments = async (req: Request, res: Response) => {
   }
 };
 
+// trae el detalle de un turno
 export const getAppointmentsById = async (req: Request, res: Response) => {
   const { id } = req.body;
 
@@ -30,6 +31,7 @@ export const getAppointmentsById = async (req: Request, res: Response) => {
   }
 };
 
+// Agenda el turno
 export const scheduleAppointments = async (req: Request, res: Response) => {
   const appdata = req.body;
   // console.log("userId", userId);
@@ -55,7 +57,7 @@ export const scheduleAppointments = async (req: Request, res: Response) => {
 };
 
 export const cancelAppointments = async (req: Request, res: Response) => {
-  const id: number = req.body;
+  const id: string = req.body;
   const appointments = await cancelAppointmentsService(id);
   res.status(200).json(appointments);
 };
