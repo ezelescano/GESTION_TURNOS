@@ -23,9 +23,19 @@ export const getUserServices = async (): Promise<User[]> => {
 };
 
 // Trae un usuario en base a su Id
-export const getUserByIdService = async (id: number): Promise<IUser[]> => {
-  const userFind = users.filter((user) => user.id == id);
-  return userFind;
+export const getUserByIdService = async (id: string): Promise<User | null> => {
+
+  const userFind = await UserModel.findOne({
+    where: {id},
+    relations: {
+      appoinment: true
+    }
+  })
+  if(!userFind){
+    return null;
+  }
+    return userFind;
+  
 };
 
 // Registra un usuario

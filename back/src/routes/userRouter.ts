@@ -4,8 +4,8 @@ import { getUser, getUserById, loginUserController, registerConstroller} from ".
 import {auth} from "../middlewares/auth";
 const userRouter: Router = Router();
 
-userRouter.get("/", auth, getUser );
-userRouter.get("/:id", auth,  getUserById);
+userRouter.get("/",  getUser );
+userRouter.get("/:id",   getUserById);
 userRouter.post("/", registerConstroller);
 userRouter.post("/login", loginUserController);
 

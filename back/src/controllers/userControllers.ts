@@ -18,23 +18,26 @@ export const getUser = async (req:Request, res: Response) =>{
 
 // controlador que trar al usuario por ID
 export const getUserById = async (req:Request, res: Response) =>{
-    const { id } = req.params;    
-    const idChange: number = Number(id);
- try {
-    const user : IUser[] = await getUserByIdService(idChange);
-    res.status(200).json(user)
- } catch (error) {
+    const { id } = req.params;   
+
+   const userFind = await getUserByIdService(id);
+   try {
+    if (userFind) {
+        res.status(200).json(userFind);
+      } else {
+        res.status(404).send("No se encontró el usuario");
+      }
+    
+   } catch (error) {
     console.error("Error en el servidor", error);
-    res.status(500).json({error: "Error al recuperar al usuario"});
- }
+    res.status(500).json({error:"Error al recuperar los datos del usuario"})
+   }
 };
 
 // controlador del registro
 export const registerConstroller = async (req:Request, res:Response) =>{
     
    const {userName, password, userData} = req.body;
-
-   console.log("userData", userData );
    
    try {
     const newUser: User | string = await registerService(userName, password, userData);

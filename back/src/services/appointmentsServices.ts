@@ -1,4 +1,6 @@
+import { AppointmentModel } from "../config/data-source";
 import { ICredentialsDto } from "../dto/CredentialDto";
+import { Appointment } from "../entities/Appointment";
 import {IAppoiments} from "../interfaces/IAppointments";
 // import { IUser } from "../interfaces/IUser";
 // import { verifyCredentialService } from "./credentialsService";
@@ -7,31 +9,28 @@ import {IAppoiments} from "../interfaces/IAppointments";
 const appointments: IAppoiments[] = [];
 let id: number = 1;
 // trae todos los turnos
-export const getAppointmentsService = async (): Promise<IAppoiments[]> =>{
+export const getAppointmentsService = async (): Promise<Appointment[]> =>{
+    const  appointments : Appointment[] = await AppointmentModel.find();
+
     return appointments;
 };
 
 // trae el detalle del turno
-export const getAppointmentsByIdService = async (id:number): Promise<IAppoiments[]> =>{
-    const appoimentFind = appointments.filter((appointment)=> appointment.id == id)
-    return appoimentFind;
+export const getAppointmentsByIdService = async (id:string): Promise<Appointment | null> =>{
+   const findApp : Appointment | null = await AppointmentModel.findOne({where:{id}});
+   if(findApp){
+       return findApp;
+   } else {
+    return null;
+   }
 };
 
 // agenda un turno
-export const scheduleAppointmentsService = async (appdata: IAppoiments ): Promise<IAppoiments> =>{
-    console.log(appdata);
-    
-    const newAppo: IAppoiments = {
-       id,
-       date: new Date(appdata.date ),
-       time: appdata.time,
-       userId: appdata.id,
-       status: appdata.status
-    };
-
-    appointments.push(newAppo);
-    id++;
-    return newAppo;
+export const scheduleAppointmentsService = async (appdata: Appointment ): Promise<Appointment> =>{
+   
+    const newApp : Appointment = AppointmentModel.create(appdata);
+   const appnew  = AppointmentModel.save(newApp);
+   return appnew;
 };
 
 // cancela un turno
