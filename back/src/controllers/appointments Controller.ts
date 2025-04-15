@@ -57,7 +57,7 @@ export const scheduleAppointments = async (req: Request, res: Response) => {
 };
 
 export const cancelAppointments = async (req: Request, res: Response) => {
-  const id: string = req.body;
+  const {id} = req.body;
   const appointments = await cancelAppointmentsService(id);
   res.status(200).json(appointments);
 };
