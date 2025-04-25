@@ -1,9 +1,6 @@
 import { CredentialModel } from "../config/data-source";
-import { ICredentialsDto } from "../dto/CredentialDto";
 import { Credential } from "../entities/Credential";
 
-import { credentialsUsers } from "../services/usersServices";
-// const credentialsUsers: ICredentialsDto[]= [];
 
 let id: number = 1;
 export const credentialService = async (
@@ -30,5 +27,8 @@ export const verifyCredentialService = async (
       password,
     },
   });
-  return !!result;
+
+  
+  if(result) return true;
+  else return false;
 };

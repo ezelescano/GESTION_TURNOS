@@ -45,16 +45,14 @@ export const registerService = async (
   userData: User
 ): Promise<User | string> => {
   const verifyCred = await verifyCredentialService(userName, password);
-  if (verifyCred == true) {
+  if (verifyCred === true) {
     return "El Usuario ya está Registrado";
   } else {
-    const newCredentials = await credentialService(userName, password)
-    const newUser = await UserModel.create({
-      ...userData,
-      credential: newCredentials
-    });
-    const result = await UserModel.save(newUser);
-    return result;
+    const user = await UserModel.create(userData);
+    const newCredentials = await credentialService(userName, password);
+    user.credential = newCredentials;
+    const newUser = await UserModel.save(user);
+  return newUser;
   }
 };
 

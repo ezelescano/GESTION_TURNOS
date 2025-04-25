@@ -15,3 +15,4 @@ export class Credential {
   @OneToOne(()=> User, (user)=> user.credential)
   user: User
 }
+
