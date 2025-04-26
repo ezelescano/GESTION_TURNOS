@@ -1,9 +1,11 @@
 import {
   AppDataSource,
+  AppointmentModel,
   CredentialModel,
   UserModel,
 } from "../config/data-source";
-import { IUserDataDto } from "../dto/UserDataDto";
+import { UserStatus } from "../entities/Appointment";
+
 
 const usersPreload = [
   {
@@ -50,39 +52,29 @@ const usersPreload = [
 
 const appoimentsPreload = [
   {
-    id: 1,
-    date: new Date("2025-04-10"),
+    date: "2025-04-10",
     time: "10:00",
-    userId: 1,
-    status: "pendiente",
+    status: "canceled",
   },
   {
-    id: 2,
-    date: new Date("2025-04-11"),
+    date: "2025-04-11",
     time: "15:30",
-    userId: 2,
-    status: "confirmado",
+    status: "active",
   },
   {
-    id: 3,
-    date: new Date("2025-04-12"),
+    date: "2025-04-12",
     time: "09:00",
-    userId: 3,
-    status: "pendiente",
+    status: "active",
   },
   {
-    id: 4,
-    date: new Date("2025-04-13"),
+    date: "2025-04-13",
     time: "11:45",
-    userId: 1,
-    status: "confirmado",
+    status: "canceled",
   },
   {
-    id: 5,
-    date: new Date("2025-04-14"),
+    date: "2025-04-14",
     time: "14:00",
-    userId: 2,
-    status: "cancelado",
+    status: "canceled",
   },
 ];
 
@@ -91,7 +83,7 @@ export const preloadUserData = async () => {
     const user = await UserModel.find();
 
     // verifico si hay usuarios en la DB
-    if (user.length) return console.log("No se realizo la precarga");
+    if (user.length) return console.log("No se realizo la precarga usuarios");
 
     // A partir de aca hace la carga de los usuarios
     for await (const user of usersPreload) {
@@ -116,4 +108,36 @@ export const preloadUserData = async () => {
   });
 };
 
+export const preloadAppoinmentData = async () => {
+  const appoiment = await AppointmentModel.find();
+  if (appoiment.length) return console.log("No se realizo la precarga de Turnos");
+  const users = await UserModel.find();
 
+  const queryRunner = AppDataSource.createQueryRunner();
+  await queryRunner.connect();
+
+  
+  const promises =  users.map((user, i) =>{
+    const appoimentData = appoimentsPreload[i];
+    const newAppointment = AppointmentModel.create({
+      time: appoimentData.time,
+      status: appoimentData.status as UserStatus,
+      date: appoimentData.date,
+      user: user
+    });
+     queryRunner.manager.save(newAppointment);
+  })
+try {
+  await queryRunner.startTransaction();
+  await Promise.all(promises);
+  console.log("Precarga de Turnos realizada con exito");
+  await queryRunner.commitTransaction();
+
+} catch (error) {
+  console.log("Error al intentar crear los turnos");
+  await queryRunner.rollbackTransaction();
+}finally{
+  console.log("Ha realizado el intento de precarga");
+  await queryRunner.release();
+}
+};
