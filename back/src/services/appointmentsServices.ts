@@ -1,13 +1,7 @@
-import { ReturnDocument } from "typeorm";
 import { AppointmentModel } from "../config/data-source";
-import { ICredentialsDto } from "../dto/CredentialDto";
 import { Appointment, UserStatus } from "../entities/Appointment";
 import { IAppoiments } from "../interfaces/IAppointments";
-// import { IUser } from "../interfaces/IUser";
-// import { verifyCredentialService } from "./credentialsService";
 
-const appointments: IAppoiments[] = [];
-let id: number = 1;
 // trae todos los turnos
 export const getAppointmentsService = async (): Promise<Appointment[]> => {
   const appointments: Appointment[] = await AppointmentModel.find();
@@ -19,6 +13,11 @@ export const getAppointmentsService = async (): Promise<Appointment[]> => {
 export const getAppointmentsByIdService = async (
   id: string
 ): Promise<Appointment | null> => {
+  try {
+    
+  } catch (error) {
+    
+  }
   const findApp: Appointment | null = await AppointmentModel.findOne({
     where: { id },
   });

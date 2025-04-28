@@ -6,7 +6,6 @@ import {
 } from "../config/data-source";
 import { UserStatus } from "../entities/Appointment";
 
-
 const usersPreload = [
   {
     userName: "jdoe",
@@ -110,34 +109,33 @@ export const preloadUserData = async () => {
 
 export const preloadAppoinmentData = async () => {
   const appoiment = await AppointmentModel.find();
-  if (appoiment.length) return console.log("No se realizo la precarga de Turnos");
+  if (appoiment.length)
+    return console.log("No se realizo la precarga de Turnos");
   const users = await UserModel.find();
 
   const queryRunner = AppDataSource.createQueryRunner();
   await queryRunner.connect();
 
-  
-  const promises =  users.map((user, i) =>{
+  const promises = users.map((user, i) => {
     const appoimentData = appoimentsPreload[i];
     const newAppointment = AppointmentModel.create({
       time: appoimentData.time,
       status: appoimentData.status as UserStatus,
       date: appoimentData.date,
-      user: user
+      user: user,
     });
-     queryRunner.manager.save(newAppointment);
-  })
-try {
-  await queryRunner.startTransaction();
-  await Promise.all(promises);
-  console.log("Precarga de Turnos realizada con exito");
-  await queryRunner.commitTransaction();
-
-} catch (error) {
-  console.log("Error al intentar crear los turnos");
-  await queryRunner.rollbackTransaction();
-}finally{
-  console.log("Ha realizado el intento de precarga");
-  await queryRunner.release();
-}
+    queryRunner.manager.save(newAppointment);
+  });
+  try {
+    await queryRunner.startTransaction();
+    await Promise.all(promises);
+    console.log("Precarga de Turnos realizada con exito");
+    await queryRunner.commitTransaction();
+  } catch (error) {
+    console.log("Error al intentar crear los turnos");
+    await queryRunner.rollbackTransaction();
+  } finally {
+    console.log("Ha realizado el intento de precarga");
+    await queryRunner.release();
+  }
 };

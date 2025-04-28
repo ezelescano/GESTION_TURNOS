@@ -20,15 +20,22 @@ export const credentialService = async (
 export const verifyCredentialService = async (
   userName: string,
   password: string
-): Promise<boolean | null> => {
-  const result = await CredentialModel.findOne({
-    where: {
-      userName,
-      password,
-    },
-  });
+): Promise<boolean | string> => {
+  try {
 
+    const result = await CredentialModel.findOne({
+      where: {
+        userName,
+        password,
+      },
+    });
   
-  if(result) return true;
-  else return false;
+    
+    if(result) return true;
+    else return false;
+  } catch (error) {
+    console.error("Hubo un error en la busqueda");
+    throw Error("Hubo un error en el verifyCredentalService")
+  }
+
 };
