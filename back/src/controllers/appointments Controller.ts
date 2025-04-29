@@ -11,6 +11,9 @@ import { getUserByIdService } from "../services/usersServices";
 export const getAppointments = async (req: Request, res: Response) => {
   try {
     const appoiments = await getAppointmentsService();
+    if (!appoiments) {
+      res.status(204).json({ message: "No hay turnos" });
+    }
     res.status(200).json(appoiments);
   } catch (error) {
     console.error({ message: "Error en el servidor", error });
@@ -24,6 +27,9 @@ export const getAppointmentsById = async (req: Request, res: Response) => {
 
   try {
     const resultAppo = await getAppointmentsByIdService(id);
+    if (typeof(resultAppo ) === "string") {
+      res.status(204).json({message: "El Turno no existe"})
+    }
     res.status(200).json(resultAppo);
   } catch (error) {
     console.error("Error en el servidor", error);
@@ -34,11 +40,11 @@ export const getAppointmentsById = async (req: Request, res: Response) => {
 // Agenda el turno
 export const scheduleAppointments = async (req: Request, res: Response) => {
   const appdata = req.body;
-  // console.log("userId", userId);
-  console.log("appData", appdata);
-  console.log("userId", appdata.userId);
-
   try {
+    const {time, date, user} = appdata;
+    if(!time || !date || !user){
+      res.status(400).json({message: "Los datos deben estar completos"})
+    }
     const findUser = await getUserByIdService(appdata.userId);
 
     if (!findUser) {
@@ -57,7 +63,13 @@ export const scheduleAppointments = async (req: Request, res: Response) => {
 };
 
 export const cancelAppointments = async (req: Request, res: Response) => {
-  const {id} = req.body;
-  const appointments = await cancelAppointmentsService(id);
-  res.status(200).json(appointments);
+  const { id } = req.body;
+  try {
+    
+    const appointments = await cancelAppointmentsService(id);
+    res.status(200).json(appointments);
+  } catch (error) {
+    
+  }
+
 };
