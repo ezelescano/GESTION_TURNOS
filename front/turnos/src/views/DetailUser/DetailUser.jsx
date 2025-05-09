@@ -1,8 +1,8 @@
+import Card from "../../components/card/Card";
+
 const DetailUser = () => {
     return(
-        <>
-        <h1>Soy el detalle del usuario</h1>
-        </>
+        <Card/>
     )
 }
 

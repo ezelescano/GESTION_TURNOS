@@ -7,9 +7,9 @@ const NavBar = () => {
           <img src="public\undraw_calendar_8r6s.svg" alt="" className={styles.imglogo} />
         </div>
         <div className={styles.spanStile}>
-        <span>Mis Turnos</span>
-        <span>Agendar Turno</span>
-        <span>Sobre Nosotros</span>
+        <span className={styles.mi_span}>Mis Turnos</span>
+        <span className={styles.mi_span}>Agendar Turno</span>
+        <span className={styles.mi_span}>Sobre Nosotros</span>
         </div>
         <div className={styles.labelImgStilo}>
             <label htmlFor="">Juan Carlos Perez</label>
